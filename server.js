@@ -170,24 +170,40 @@ app.get('/health', (req, res) => {
 });
 
 // ====== GitHub Webhook for Auto Deployment ======
-app.post('/github-webhook', (req, res) => {
+// app.post('/github-webhook', (req, res) => {
+//   console.log("🪝 Webhook triggered!");
+//   try {
+//     console.log("📦 Running deploy script...");
+//     exec('bash ~/deploy.sh', (error, stdout, stderr) => {
+//       if (error) {
+//         console.error(`❌ Deployment error: ${error.message}`);
+//         console.error(stderr);
+//         return res.status(500).send('Deployment failed');
+//       }
+//       console.log('✅ Deployment Output:', stdout);
+//       res.status(200).send('Deployed successfully');
+//     });
+//   } catch (err) {
+//     console.error('❌ Error executing webhook:', err);
+//     res.status(500).send('Error executing webhook');
+//   }
+// });
+
+// ====== GitHub Webhook for Auto Deployment ======
+app.post('/github-webhook', express.json({ type: '*/*' }), (req, res) => {
   console.log("🪝 Webhook triggered!");
-  try {
-    console.log("📦 Running deploy script...");
-    exec('bash ~/deploy.sh', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`❌ Deployment error: ${error.message}`);
-        console.error(stderr);
-        return res.status(500).send('Deployment failed');
-      }
-      console.log('✅ Deployment Output:', stdout);
-      res.status(200).send('Deployed successfully');
-    });
-  } catch (err) {
-    console.error('❌ Error executing webhook:', err);
-    res.status(500).send('Error executing webhook');
-  }
+  
+  res.status(200).send('Webhook received — deployment started.');
+
+  exec('bash ~/deploy.sh', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`❌ Deployment error: ${error.message}`);
+      return;
+    }
+    console.log('✅ Deployment Output:', stdout);
+  });
 });
+
 
 // ====== Default Route ======
 app.get('/', (req, res) => {
@@ -200,4 +216,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
+console.log("🚀 Auto deploy test success!");
 console.log("🚀 Auto deploy test success!");
