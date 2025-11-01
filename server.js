@@ -11,15 +11,17 @@ const app = express();
 // ====== CORS Configuration ======
 const corsOptions = {
   origin: [
-    'http://localhost:3000', // local dev
-    'https://resilient-llama-e70898.netlify.app' // your Netlify site
+    'http://localhost:3000',
+    'https://resilient-llama-e70898.netlify.app'
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ✅ Handle preflight requests
 
 
 // 🔹 Allow large JSON payloads for GitHub Webhook
