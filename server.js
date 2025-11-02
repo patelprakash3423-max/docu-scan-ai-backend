@@ -110,21 +110,36 @@ require('dotenv').config();
 const app = express();
 
 // ====== CORS Configuration ======
+// const corsOptions = {
+//   origin: [
+//     'http://localhost:3000',
+//     'https://resilient-llama-e70898.netlify.app',
+//   ],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// };
+
+// app.use(cors(corsOptions));
+
+// // ✅ Express 5 compatible preflight handler (replaces app.options('*', ...))
+// app.options(/.*/, cors(corsOptions));
+
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'https://resilient-llama-e70898.netlify.app'
+    'https://resilient-llama-e70898.netlify.app',
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
-// ✅ Express 5 compatible preflight handler (replaces app.options('*', ...))
-app.options(/.*/, cors(corsOptions));
 
 // ====== Middleware ======
 app.use(express.json({ limit: '10mb', type: 'application/json' }));
